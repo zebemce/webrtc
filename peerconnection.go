@@ -1753,6 +1753,27 @@ func (pc *PeerConnection) RemoveTrack(sender *RTPSender) (err error) {
 	return
 }
 
+func (pc *PeerConnection) RemoveAllTracks() (err error) {
+	if pc.isClosed.get() {
+		return &rtcerr.InvalidStateError{Err: ErrConnectionClosed}
+	}
+
+	pc.mu.Lock()
+	defer pc.mu.Unlock()
+	for _, transceiver := range pc.rtpTransceivers {
+		if transceiver == nil {
+			return &rtcerr.InvalidAccessError{Err: ErrSenderNotCreatedByConnection}
+		} else if err = transceiver.Sender().Stop(); err == nil {
+			err = transceiver.setSendingTrack(nil)
+			if err == nil {
+				pc.onNegotiationNeeded()
+			}
+		}
+	}
+
+	return
+}
+
 func (pc *PeerConnection) newTransceiverFromTrack(direction RTPTransceiverDirection, track TrackLocal) (t *RTPTransceiver, err error) {
 	var (
 		r *RTPReceiver
