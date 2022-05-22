@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	"github.com/pion/ice/v2"
-	"github.com/pion/webrtc/v3/pkg/rtcerr"
 	"github.com/stretchr/testify/assert"
+	"github.com/zebemce/webrtc/v3/pkg/rtcerr"
 )
 
 func TestICEServer_validate(t *testing.T) {

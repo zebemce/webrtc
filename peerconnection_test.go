@@ -8,8 +8,8 @@ import (
 
 	"github.com/pion/sdp/v3"
 	"github.com/pion/transport/test"
-	"github.com/pion/webrtc/v3/pkg/rtcerr"
 	"github.com/stretchr/testify/assert"
+	"github.com/zebemce/webrtc/v3/pkg/rtcerr"
 )
 
 // newPair creates two new peer connections (an offerer and an answerer)

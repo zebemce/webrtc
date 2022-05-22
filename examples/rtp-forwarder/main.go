@@ -13,8 +13,8 @@ import (
 	"github.com/pion/interceptor"
 	"github.com/pion/rtcp"
 	"github.com/pion/rtp"
-	"github.com/pion/webrtc/v3"
-	"github.com/pion/webrtc/v3/examples/internal/signal"
+	"github.com/zebemce/webrtc/v3"
+	"github.com/zebemce/webrtc/v3/examples/internal/signal"
 )
 
 type udpConn struct {
