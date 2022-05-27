@@ -1763,12 +1763,27 @@ func (pc *PeerConnection) RemoveAllTracks() (err error) {
 	for _, transceiver := range pc.rtpTransceivers {
 		if transceiver == nil {
 			return &rtcerr.InvalidAccessError{Err: ErrSenderNotCreatedByConnection}
-		} else if err = transceiver.Sender().Stop(); err == nil {
-			err = transceiver.setSendingTrack(nil)
-			if err == nil {
-				pc.onNegotiationNeeded()
+		} else {
+			if sender := transceiver.Sender(); sender != nil {
+				if err = sender.Stop(); err == nil {
+					err = transceiver.setSendingTrack(nil)
+					if err == nil {
+						return err
+					}
+				}
 			}
+
 		}
+	}
+
+	negotiationNeeded := false
+	for i := 0; i < len(pc.rtpTransceivers); i++ {
+		pc.rtpTransceivers[i] = nil
+		negotiationNeeded = true
+	}
+	pc.rtpTransceivers = pc.rtpTransceivers[0:]
+	if negotiationNeeded {
+		pc.onNegotiationNeeded()
 	}
 
 	return
