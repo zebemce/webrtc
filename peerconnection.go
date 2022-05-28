@@ -1760,7 +1760,6 @@ func (pc *PeerConnection) RemoveAllTracks() (err error) {
 
 	pc.mu.Lock()
 	defer pc.mu.Unlock()
-	negotiationNeeded := false
 	for _, transceiver := range pc.rtpTransceivers {
 		if transceiver == nil {
 			return &rtcerr.InvalidAccessError{Err: ErrSenderNotCreatedByConnection}
@@ -1771,16 +1770,12 @@ func (pc *PeerConnection) RemoveAllTracks() (err error) {
 					if err == nil {
 						return err
 					} else {
-						negotiationNeeded = true
+						pc.onNegotiationNeeded()
 					}
 				}
 			}
 
 		}
-	}
-
-	if negotiationNeeded {
-		pc.onNegotiationNeeded()
 	}
 
 	return
