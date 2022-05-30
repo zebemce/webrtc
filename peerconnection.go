@@ -1767,7 +1767,7 @@ func (pc *PeerConnection) RemoveAllTracks() (err error) {
 			if sender := transceiver.Sender(); sender != nil {
 				if err = sender.Stop(); err == nil {
 					err = transceiver.setSendingTrack(nil)
-					if err == nil {
+					if err != nil {
 						return err
 					} else {
 						pc.onNegotiationNeeded()
